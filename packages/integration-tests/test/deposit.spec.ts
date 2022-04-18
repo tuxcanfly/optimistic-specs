@@ -44,7 +44,7 @@ describe('Deposits', () => {
     const value = utils.parseEther('0.1')
     const factory = new ContractFactory(
       multiDepositorArtifact.abi,
-      multiDepositorArtifact.bytecode.object,
+      multiDepositorArtifact.bin,
     ).connect(env.l1Wallet)
     const contract = await factory.deploy(portal.address)
     await contract.deployed()
@@ -63,9 +63,9 @@ describe('Deposits', () => {
     const value = utils.parseEther('0.1')
     const factory = new ContractFactory(
       counterArtifact.abi,
-      counterArtifact.bytecode.object,
+      counterArtifact.bin,
     )
-    const tx = await factory.getDeployTransaction()
+    const tx = factory.getDeployTransaction()
     const result = await portal.depositTransaction(
       `0x${'0'.repeat(40)}`,
       '0',
@@ -85,7 +85,7 @@ describe('Deposits', () => {
 
     await awaitCondition(async () => {
       const code = await env.l2Provider.getCode(addr)
-      return code === counterArtifact.bytecode.object
+      return code === counterArtifact.bin
     })
   })
 })
